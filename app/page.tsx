@@ -8,7 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image'; // Import the Image component from next/image
 
 // Default prompt used for the initial load
-const DEFAULT_PROMPT = 'neuronal hyper-object white 3D  alive floating rotating tendrils blood biolumiscense transparent white background ';
+const DEFAULT_PROMPT = 'realistic white perception organ neuron floating white background with neuronal oil drops and bubles  white 3D salt cristals alive, hyper object floating, tendrils with blood and lava biolumiscent, projects gels, transparent 0 gravity and no floor, lots of movement  and visible fluids, sun fire, long cilia towards camera ganglia transparent, red bone marrow dendrites hyper neuroception';
 
 // Function to generate a random seed
 function randomSeed() {
@@ -27,7 +27,7 @@ const INPUT_DEFAULTS = {
   image_size: 'square_hd',
   sync_mode: true,
   num_images: 1,
-  num_inference_steps: '2',
+  num_inference_steps: '3',
 };
 
 // Main component
