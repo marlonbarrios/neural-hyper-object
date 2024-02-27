@@ -80,7 +80,7 @@ export default function Lightning() {
     // Setup interval to update the seed every 500 milliseconds
     const seedUpdateInterval = setInterval(() => {
       setSeed(randomSeed());
-    }, 500);
+    }, 2000);
 
     // Cleanup interval on component unmount
     return () => clearInterval(seedUpdateInterval);
@@ -91,17 +91,12 @@ export default function Lightning() {
     <main>
       <div className="container py-4 px-1.5 space-y-4 lg:space-y-8 mx-auto">
         <div className="flex flex-col space-y-2">
+        <div className="space-y-1"> Warzone Neurons by Marlon Barrios Solano</div>
           <div className="flex flex-col max-md:space-y-4 md:flex-row md:space-x-4">
             <div className="flex-1 space-y-1">
-              <label>Prompt</label>
-              <Input
-                onChange={(e) => handleOnChange(e.target.value)}
-                className="font-light w-full"
-                placeholder="Type something..."
-                value={prompt}
-              />
-            </div>
-            <div className="space-y-1">
+             </div>
+             
+            {/* <div className="space-y-1">
               <label>Seed</label>
               <Input
                 onChange={(e) => {
@@ -113,10 +108,11 @@ export default function Lightning() {
                 type="number"
                 value={seed}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="flex flex-col space-y-6 lg:flex-row lg:space-y-0">
+       
           <div className="flex-1 flex-col flex items-center justify-center">
             {image && inferenceTime && (
               <div className="flex flex-row space-x-1">
