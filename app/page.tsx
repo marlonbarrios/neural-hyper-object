@@ -91,7 +91,7 @@ export default function Lightning() {
     <main>
       <div className="container py-4 px-1.5 space-y-4 lg:space-y-8 mx-auto">
         <div className="flex flex-col space-y-2">
-        <div className="space-y-1"> Warzone Neurons by Marlon Barrios Solano</div>
+        <div className="space-y-1"> Looking for Mr.Parker by Marlon Barrios Solano</div>
           <div className="flex flex-col max-md:space-y-4 md:flex-row md:space-x-4">
             <div className="flex-1 space-y-1">
              </div>
