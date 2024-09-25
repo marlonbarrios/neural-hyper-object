@@ -9,7 +9,7 @@ import Image from 'next/image'; // Import the Image component from next/image
 
 // Default prompt used for the initial load
 // const DEFAULT_PROMPT = 'realistic white perception organ neuron floating white background with neuronal oil drops and bubles  white 3D salt cristals alive, hyper object floating, tendrils with blood and lava biolumiscent, projects gels, transparent 0 gravity and no floor, lots of movement  and visible fluids, sun fire, long cilia towards camera ganglia transparent, red bone marrow dendrites hyper neuroception';
-const DEFAULT_PROMPT =  "photo of a 35 years old man, handsome, blue eyes, and blond, fatherly, curly hair, sideburns, closeup, sleeveless, expressive a father from the 1960's, color image from old polaroid,  building a wood boat, sweating, looking at the camera, very sunny, close up, smiling and welcoming, with woodwork told in his hands, active working, polaroid, beach house"
+const DEFAULT_PROMPT =  "photo of a 40 years old man, handsome, blue eyes, and blond, fatherly, straigt blond hair, sideburns, closeup, sleeveless, expressive father from the 1960's, color image from old polaroid,  building a wood boat, sweating, looking at the camera, very sunny, close up, smiling and welcoming, with woodwork told in his hands, active working, polaroid, beach house"
 // Function to generate a random seed
 function randomSeed() {
   return Math.floor(Math.random() * 10000000).toFixed(0);
