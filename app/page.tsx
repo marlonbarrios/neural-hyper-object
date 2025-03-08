@@ -96,7 +96,7 @@ export default function Lightning() {
             <div className="flex-1 space-y-1">
              </div>
              
-            {/* <div className="space-y-1">
+         <div className="space-y-1">
               <label>Seed</label>
               <Input
                 onChange={(e) => {
@@ -108,7 +108,7 @@ export default function Lightning() {
                 type="number"
                 value={seed}
               />
-            </div> */}
+            </div>
           </div>
         </div>
         <div className="flex flex-col space-y-6 lg:flex-row lg:space-y-0">
