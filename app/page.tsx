@@ -1,94 +1,122 @@
 
- 'use client'// Import necessary hooks and components from React, Next.js, and external libraries
-import { useEffect, useRef, useState } from 'react';
-import * as fal from '@fal-ai/serverless-client';
-import { Input } from '@/components/ui/input';
-import { ModelIcon } from '@/components/icons/model-icon';
-import Link from 'next/link';
-import Image from 'next/image'; // Import the Image component from next/image
+"use client";
 
-// Default prompt used for the initial load
-// const DEFAULT_PROMPT = 'realistic white perception organ neuron floating white background with neuronal oil drops and bubles  white 3D salt cristals alive, hyper object floating, tendrils with blood and lava biolumiscent, projects gels, transparent 0 gravity and no floor, lots of movement  and visible fluids, sun fire, long cilia towards camera ganglia transparent, red bone marrow dendrites hyper neuroception';
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-html-link-for-pages */
+import * as fal from "@fal-ai/serverless-client";
+import { useEffect, useRef, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { ModelIcon } from "@/components/icons/model-icon";
+import Link from "next/link";
+
+const DISABLED = false;
 const DEFAULT_PROMPT =  "photo of a 40 years old man, handsome, blue eyes, and blond, fatherly, straigt blond hair, sideburns, closeup, sleeveless, expressive father from the 1960's, color image from old polaroid,  building a wood boat, sweating, looking at the camera, very sunny, close up, smiling and welcoming, with woodwork told in his hands, active working, polaroid, beach house"
-// Function to generate a random seed
+
 function randomSeed() {
   return Math.floor(Math.random() * 10000000).toFixed(0);
 }
 
-// Configuration for the FAL client
 fal.config({
-  proxyUrl: '/api/proxy',
+  proxyUrl: "/api/proxy",
 });
 
-// Default input configurations
 const INPUT_DEFAULTS = {
   _force_msgpack: new Uint8Array([]),
-  enable_safety_checker: true,
-  image_size: 'square_hd',
+  enable_safety_checker: false,
+  image_size: {
+    width: 768,
+    height: 768,
+  },
   sync_mode: true,
   num_images: 1,
-  num_inference_steps: '3',
+  num_inference_steps: "2",
 };
 
-// Main component
+function DisabledMessage() {
+  return (
+    <div className="flex flex-col mt-60">
+      <div className="py-4 px-0 space-y-4 lg:space-y-8 mx-auto">
+        <h1 className="text-lg">
+          Hey there! This demo is now published on <a
+            className="underline"
+            href="https://fal.ai/demos/fastsdxl"
+          >
+            fal.
+          </a>{" "}
+        </h1>
+
+        <p className="text-lg">
+          In the meantime, feel free to fork this{" "}
+          <a
+            className="underline"
+            href="https://github.com/fal-ai/real-time-demo-app"
+          >
+            repo
+          </a>{" "}
+          and follow the{" "}
+          <a
+            className="underline"
+            href="https://twitter.com/dabit3/status/1761194109841146026"
+          >
+            tutorial
+          </a>
+          to build your own version.
+        </p>
+        <p>Team fal ❤️</p>
+      </div>
+    </div>
+  );
+}
+
 export default function Lightning() {
-  const [image, setImage] = useState<string | null>(null); // State for the generated image, corrected type to string | null
-  const [prompt, setPrompt] = useState(DEFAULT_PROMPT); // State for the user input prompt
-  const [seed, setSeed] = useState<string>(randomSeed()); // Corrected type to string
-  const [inferenceTime, setInferenceTime] = useState<number>(NaN); // State to store inference time
+  const [image, setImage] = useState<null | string>(null);
+  const [prompt, setPrompt] = useState<string>(DEFAULT_PROMPT);
+  const [seed, setSeed] = useState<string>(randomSeed());
+  const [inferenceTime, setInferenceTime] = useState<number>(NaN);
 
-  // Ref for managing the interval ID
-  const timer = useRef<NodeJS.Timeout>();
-
-  // Establish a connection to the FAL server
-  const connection = useRef(fal.realtime.connect('fal-ai/fast-lightning-sdxl', {
-    connectionKey: 'lightning-sdxl',
+  const connection = fal.realtime.connect("fal-ai/flux-schnell-realtime", {
+    connectionKey: "flux-schnell-realtime",
     throttleInterval: 64,
     onResult: (result) => {
-      const blob = new Blob([result.images[0].content], { type: 'image/jpeg' });
+      const blob = new Blob([result.images[0].content], { type: "image/jpeg" });
       setImage(URL.createObjectURL(blob));
       setInferenceTime(result.timings.inference);
     },
-  })).current;
+  });
 
-  // Handle changes in the prompt input by the user
-  const handleOnChange = (prompt: string) => {
+  const timer = useRef<any | undefined>(undefined);
+
+  const handleOnChange = async (prompt: string) => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
     setPrompt(prompt);
     const input = {
       ...INPUT_DEFAULTS,
       prompt: prompt,
-      seed: Number(seed),
+      seed: seed ? Number(seed) : Number(randomSeed()),
     };
     connection.send(input);
+    timer.current = setTimeout(() => {
+      connection.send({ ...input, num_inference_steps: "4" });
+    }, 500);
   };
 
-  // Effect hook for initial load and setting up the seed update interval
   useEffect(() => {
-    // Set cookie for initial setup
-    if (typeof window !== 'undefined') {
-      window.document.cookie = 'fal-app=true; path=/; samesite=strict; secure;';
+    if (typeof window !== "undefined") {
+      window.document.cookie = "fal-app=true; path=/; samesite=strict; secure;";
     }
-
-    // Send initial request
+    // initial image
     connection.send({
       ...INPUT_DEFAULTS,
-      num_inference_steps: '4',
+      num_inference_steps: "4",
       prompt: prompt,
-      seed: Number(seed),
+      seed: seed ? Number(seed) : Number(randomSeed()),
     });
+  }, []);
 
-    // Setup interval to update the seed every 500 milliseconds
-    const seedUpdateInterval = setInterval(() => {
-      setSeed(randomSeed());
-    }, 2000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(seedUpdateInterval);
-  }, [connection, prompt, seed]); // Added dependencies based on ESLint recommendation
-
-  // Render the component UI
   return (
-     <main>
+    <main>
       <div className="flex flex-col justify-between h-[calc(100vh-56px)]">
         {DISABLED ? (
           <DisabledMessage />
@@ -174,3 +202,4 @@ export default function Lightning() {
     </main>
   );
 }
+
